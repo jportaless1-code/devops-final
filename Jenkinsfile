@@ -21,4 +21,22 @@ pipeline {
             }
         }
     }
+
+    post {
+        success {
+            emailext(
+                subject: 'Build SUCCESS DevOps',
+                body: 'El pipeline terminó correctamente.',
+                to: 'francisco@test.com'
+            )
+        }
+
+        failure {
+            emailext(
+                subject: 'Build FAILED DevOps',
+                body: 'El pipeline falló.',
+                to: 'francisco@test.com'
+            )
+        }
+    }
 }
