@@ -1,0 +1,35 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Inicio') {
+            steps {
+                echo 'Iniciando pipeline DevOps...'
+            }
+        }
+
+        stage('Build Docker') {
+            steps {
+                sh 'docker build -t devops-app ./app'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                sh '''
+                docker rm -f devops-app || true
+                docker run -d --name devops-app --restart unless-stopped -p 8081:80 devops-app
+                '''
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline finalizado correctamente.'
+        }
+        failure {
+            echo 'Pipeline fallido.'
+        }
+    }
+}
